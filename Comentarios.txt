@@ -1,0 +1,91 @@
+Comentarios de la Estructura y Complejidades TP 2
+
+Definimos la clase BestEffort;
+	Con los atributos privados
+	lTraslados que es LibretaTraslados
+	lCiudades que es LibretaCiudades
+
+Definimos la clase Ciudad
+	int id
+	int ganacia
+	int perdida
+	int handleSuperavit
+La ciudad tiene asignado un id, su ganacia, perdida y un handleSuperavit. Explicamos porque aplicamos Handles al final.
+
+Definimos la clase Heap <Traslado>
+Con atributo privado :
+●	elems de tipo ArrayList<T>
+●	comp de tipo Comparator<T>
+●	cantElems de tipo int
+
+metodos:
+●       heapify
+● 	hijo_izq 
+●	hijo_der 
+●	padre 
+●       siftup O(log n)
+●       siftdown O(log n)
+●       actualizar O(log n)
+●       eliminar O(log n)
+●       agregar O(log n)
+entre otros.
+
+Que recibe una secuencia tipo T y el comparador y los ordena según el criterio. 
+
+Definimos la clase LibretaCiudades
+	Con atributo privado
+●	ciudades que es una seq de ciudad
+●	heapSuperavit que es un Heap<Ciudad>
+●	ciudadesMayorPerdida que es un ArrayList<Integer>
+●	ciudadesMayorGanancia que es un ArrayList<Integer>
+
+Constructor:
+Inicializamos la libreta creando <ciudades> del tamaño de cantCiudades que nos dan;. ciudadesMayorGanancia, ciudadesMayorPerdida los inicializamos en 0. Creamos new Heap con los parametros <ciudades,SuperavitComparator>
+
+Desarrollamos los procs:
+●	sumarGanancia. Parametros: la ciudad y el valor. 
+	Actualizo el valor del atributo ganacia para esa ciudad. 
+	Si ciudadesMayorGanancia esta vacio agrego ciudad a ciudadesMayorGanancia.{
+	else: Si el modulo de ciudadesMayorGanancia es mayor a 0 y la ganancia de la ciudad es mayor a MayorGananciaActual (posicion 0 de la lista); saca la que estaba y lo reemplaz por la ciudad.
+	else: Si el modulo de ciudadesMayorGanancia es mayor a 0 y la ganancia de la ciudad es igual a MayorGananciaActual agrego a ciudad a ciudadesMayorGanancia.
+	} Actualizo el superavit.
+
+●	sumarPerdida donde ingresa la ciudad y el valor. 
+	Actualizo el valor del atributo perdida para ciudad. 
+	Si ciudadesMayorPerdida esta vacia. Agrego a ciudad a la secuencia.
+	else: Si ciudadesMayorPerdida ya tiene algun elemento compara la perdida de la ciudad con mayorPerdidaActual (posicion 0 de ciudadesMayorPerdida)  y si es mayor: vacia la secuencia y agrega a la ciudad. si es igual agrega a ciudad a la secuencia. 
+	Actualizo el superavit
+
+●	CiudadMayorSuperavit devuelve el elemento del heapSuperavit de mayor prioridad. O(1)
+●	listaCiudadesMayorPerdida devuelve ciudadesMayorPerdida O(1)
+●	listaCiudadesMayorGanancia devuelve ciudadesMayorGanancia O(1)
+●	actualizarSuperavit llama a la funcion Actualizar de la clase heap. Desde la posicion i hace siftup y siftdown. Es decir reacomoda el heap. Los handles se modifican. O(log n)
+●	obtener devuelve el "identificador" de la ciudad en la posicion i. O(1)
+●	longitud devuelve la longitud de la secuencia ciudades. O(1)
+
+Comparadores:
+	gananciaComparator; compara ganancias entre ciudades
+	perdidaComparator; compara perdidas entre ciudades.
+
+Definimos la clase LibretaTraslados
+	atributos privados
+●	trasladosRedito es un Heap<Traslado>
+●	trasladosTimeStamp es un Heap<Traslado> 
+●	gananciaPromedioGlobal es un float empieza en 0.
+
+-agregarTraslado recibe un traslado y lo agrega a trasladosRedito y trasladosTimeStamp O(log n)
+-despacharAntiguos elimina el traslado de mayor priorirdad en trasladosRedito y en trasladosTimeStamp. Luego actualiza la ganancia promedio. O(log n)
+-despacharRedituables elimina el traslado de mayor priorirdad en trasladosRedito y en trasladosTimeStamp. Luego actualiza la ganancia promedio. O(log n)
+-actualizarGananciaPromedio recibe un float y vuelve a calcular el promedio. O(1) 
+-gananciaPromedio devuelve la gananciaPromedioGlobal O(1)
+
+Comparadores definidos en clases individuales:
+	ReditoComparator; compara la ganacia neta de dos traslados.
+	SuperavitComparator; compara la diferencia entre la ganancia y la perdida de dos ciudades.
+	TimeStampComparator; compara las fechas de dos traslados.
+
+En la implementación de la clase Traslados, incorporamos dos "handles", handleTimeStamp y handleRedito, con el objetivo de optimizar el acceso a ciertas posiciones en un heap y mantener la complejidad en O(1) para operaciones específicas.
+Estos "handles" actúan como referencias directas, permitiendo acceder a elementos específicos del heap sin necesidad de recorrerlo o buscar por índice. Agregamos dos métodos, modificarHandleTimeStamp y modificarHandleRedito, que se encargan de modificar el valor o referencia almacenada en cada handle de manera controlada.
+El heap Superavit tambien tiene Handles.
+
+
